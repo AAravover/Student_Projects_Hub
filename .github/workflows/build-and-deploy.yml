@@ -54,8 +54,8 @@ jobs:
           REPO="${{ github.repository }}"
           for i in $(seq 1 12); do
             resp=$(curl -sS -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${REPO}/pages" || true)
-            status=$(echo "$resp" | jq -r .status // empty)
-            url=$(echo "$resp" | jq -r .html_url // empty)
+            status=$(echo "$resp" | jq -r '.status // empty')
+            url=$(echo "$resp" | jq -r '.html_url // empty')
             echo "Pages status: $status; html_url: $url"
             if [ "$status" = "built" ] && [ "$url" != "null" ] && [ -n "$url" ]; then
               echo "Pages available at: $url"
