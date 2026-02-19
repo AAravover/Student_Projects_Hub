@@ -6,12 +6,14 @@ on:
       - main
       - initial_setup
 
+permissions:
+  contents: read
+  pages: write
+  id_token: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pages: write
 
     steps:
       - name: Checkout repository
@@ -33,54 +35,19 @@ jobs:
       - name: Build site
         run: python scripts/build_site.py
 
-      - name: Publish site into repo /docs/ (single-branch Pages)
-        env:
-          BRANCH: ${{ github.ref_name }}
-        run: |
-          echo "Copying site/ -> docs/ on branch $BRANCH"
-          rm -rf docs || true
-          mkdir -p docs
-          cp -a site/. docs/
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs
-          if git diff --cached --quiet; then
-            echo "No changes to docs/"
-          else
-            git commit -m "chore: update site docs [skip ci]"
-            git push origin "$BRANCH"
-          fi
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'site/'
 
-      - name: Configure Pages to serve from branch/docs
-        env:
-          REPO: ${{ github.repository }}
-          BRANCH: ${{ github.ref_name }}
-        run: |
-          echo "Configuring GitHub Pages to serve from $BRANCH /docs"
-          curl -sS -X PUT "https://api.github.com/repos/${REPO}/pages" \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -d '{"source":{"branch":"'"${BRANCH}"'","path":"/docs"}}' || true
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
-      - name: Delete remote gh-pages branch (cleanup, single-branch setup)
-        run: |
-          echo "Deleting remote gh-pages branch if it exists"
-          git push origin --delete gh-pages || true
-
-      - name: Wait for Pages site to be published and show URL
-        env:
-          REPO: ${{ github.repository }}
-        run: |
-          for i in $(seq 1 36); do
-            resp=$(curl -sS -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${REPO}/pages" || true)
-            status=$(echo "$resp" | jq -r '.status // empty')
-            url=$(echo "$resp" | jq -r '.html_url // empty')
-            echo "Pages status: $status; html_url: $url"
-            if [ "$status" = "built" ] && [ "$url" != "null" ] && [ -n "$url" ]; then
-              echo "Pages available at: $url"
-              exit 0
-            fi
-            sleep 5
-          done
-          echo "Pages did not become available in time; check repository Settings → Pages"
-          exit 1
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
