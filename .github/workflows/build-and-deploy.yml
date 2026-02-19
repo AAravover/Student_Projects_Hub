@@ -52,7 +52,7 @@ jobs:
       - name: Wait for Pages site to be published and show URL
         run: |
           REPO="${{ github.repository }}"
-          for i in $(seq 1 12); do
+          for i in $(seq 1 36); do
             resp=$(curl -sS -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${REPO}/pages" || true)
             status=$(echo "$resp" | jq -r '.status // empty')
             url=$(echo "$resp" | jq -r '.html_url // empty')

@@ -156,6 +156,8 @@ How it works:
 
 Preview the generated site at: https://<your-github-username>.github.io/Student_Projects_Hub (enable Pages in repo settings if not already enabled)
 
+Live site (should be available after a successful deploy): https://chandraveshchaudhari.github.io/Student_Projects_Hub/
+
 Developers: to preview locally run:
 
 ```bash
