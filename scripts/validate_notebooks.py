@@ -25,13 +25,29 @@ def validate_notebook(path: Path) -> tuple[bool, str]:
 
     cells = data.get("cells") or []
     # find first markdown cell
+    import re
+
     for cell in cells:
         if cell.get("cell_type") == "markdown":
             src = "".join(cell.get("source") or [])
-            for ln in (l.strip() for l in src.splitlines()):
-                if ln:
-                    return True, ln  # dataset name
-            return False, "first markdown cell is empty"
+            lines = [l.strip() for l in src.splitlines()]
+
+            # first non-empty line is the dataset name
+            dataset = next((ln for ln in lines if ln), None)
+            if not dataset:
+                return False, "first markdown cell is empty"
+
+            # require an Author: or Group: line in the first markdown cell
+            author = None
+            for ln in lines:
+                m = re.match(r"^(?:Author|Group)\s*:\s*(.+)$", ln, flags=re.I)
+                if m:
+                    author = m.group(1).strip()
+                    break
+            if not author:
+                return False, "missing 'Author:' or 'Group:' line in the first markdown cell"
+
+            return True, f"dataset={dataset}; author={author}"
 
     return False, "no markdown cells found"
 

@@ -26,10 +26,11 @@ Student_Projects_Hub/
 3. Use [PROJECT_TEMPLATE.md](PROJECT_TEMPLATE.md) as a guide for your notebook
 
 ### Submission Checklist
-- [ ] Created personal folder: `2026/[Course]/[your_name]/`
-- [ ] Uploaded `.ipynb` file with descriptive name
+- [ ] Uploaded `.ipynb` file to the correct course folder (e.g. `2026/Data_Analysis_using_Python/`)
+- [ ] Notebook filename is descriptive (use underscores, no spaces)
+- [ ] First markdown cell contains dataset name and Group/Author
 - [ ] Notebook runs without errors
-- [ ] Includes title, name, and documentation
+- [ ] Includes title and documentation
 - [ ] Created pull request with clear description
 
 ### Quick Links

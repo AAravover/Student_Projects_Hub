@@ -17,8 +17,7 @@ Please follow the detailed instructions in the main [README.md](README.md) file.
 
 1. **Fork** the repository
 2. **Navigate** to your course folder (`[year]/[course_name]/`)
-3. **Create** your personal folder (`your_name/`)
-4. **Upload** your Jupyter notebook(s)
+3. **Upload** your Jupyter notebook(s) directly into the appropriate course folder
 5. **Commit** your changes
 6. **Create** a pull request
 
@@ -27,7 +26,7 @@ Please follow the detailed instructions in the main [README.md](README.md) file.
 Before submitting your pull request, ensure:
 
 - [ ] Your project is in the correct year and course folder
-- [ ] You have created a personal folder with your name
+ - [ ] Your notebook file has a descriptive name and is placed in the course folder
 - [ ] Your notebook file has a descriptive name
 - [ ] All code cells run without errors
 - [ ] Your notebook includes:
@@ -68,9 +67,9 @@ Brief description of the project
 - Use appropriate chart types for your data
 - Make visualizations readable (proper sizing, colors)
 
-## 🚫 What Not to Do
+- ## 🚫 What Not to Do
 
-- ❌ Don't modify files outside your personal folder
+- ❌ Don't modify other students' projects
 - ❌ Don't include sensitive or proprietary data
 - ❌ Don't upload large datasets (use links instead)
 - ❌ Don't submit incomplete or non-working notebooks

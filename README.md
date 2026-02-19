@@ -4,21 +4,20 @@ Welcome to the Student Projects Hub! This repository is a central location for s
 
 ## 📚 Repository Structure
 
-Projects are organized by **year** and **course**:
+Projects are organized by **year** and **course**. Students add notebooks directly to the course folder (the site extracts the group/author name from each notebook's first markdown cell):
 
 ```
 Student_Projects_Hub/
 ├── 2026/
 │   ├── Python_for_Data_Analytics_II/
 │   │   ├── README.md
-│   │   └── [student_name]/
-│   │       └── project_name.ipynb
+│   │   ├── group_alpha_sales_analysis.ipynb
+│   │   └── group_beta_customer_segmentation.ipynb
 │   └── Data_Analysis_using_Python/
 │       ├── README.md
-│       └── [student_name]/
-│           └── project_name.ipynb
+│       └── project_example.ipynb
 └── [future_years]/
-    └── [future_courses]/
+   └── [future_courses]/
 ```
 
 ## 🎯 Available Courses
@@ -46,19 +45,17 @@ This is a step-by-step guide for students who are new to GitHub and pull request
 1. In your forked repository, navigate to the appropriate year and course folder
    - Example: `2026/Python_for_Data_Analytics_II/` or `2026/Data_Analysis_using_Python/`
 
-#### Step 3: Create Your Project Folder
-1. Click on **Add file** → **Create new file**
-2. In the file name field, type: `your_name/your_project_name.ipynb`
-   - Replace `your_name` with your actual name (use underscores instead of spaces)
-   - Replace `your_project_name` with your project's name
-   - Example: `john_doe/sales_analysis.ipynb`
-3. This will automatically create a folder with your name
+#### Step 3: Add your notebook file
+1. Click on **Add file** → **Create new file** or **Upload files**
+2. Add your notebook directly under the appropriate course folder, e.g. `2026/Data_Analysis_using_Python/groupname_project.ipynb`.
+   - Use a descriptive filename (underscores, no spaces).
+   - Ensure the first markdown cell in your notebook contains the dataset name and your group/author name (see `PROJECT_TEMPLATE.md`).
 
 #### Step 4: Upload Your Jupyter Notebook
 1. You can either:
    - **Option A**: Copy and paste your notebook content directly into the file
    - **Option B**: Use **Add file** → **Upload files** to upload your `.ipynb` file
-2. Make sure your file is in your personal folder: `2026/[Course_Name]/your_name/`
+2. Make sure your file is in the correct course folder: `2026/[Course_Name]/`
 
 #### Step 5: Commit Your Changes
 1. Scroll down to the **Commit changes** section
@@ -92,8 +89,8 @@ This is a step-by-step guide for students who are new to GitHub and pull request
 ## 📋 Project Guidelines
 
 ### File Naming Convention
-- Use your name for the folder: `firstname_lastname/`
-- Use descriptive names for your project: `descriptive_project_name.ipynb`
+- Put your notebook file in the course folder (or an optional subfolder).
+- Use descriptive filenames, for example: `groupname_sales_analysis.ipynb`.
 - Avoid spaces; use underscores instead
 
 ### Project Requirements
@@ -101,7 +98,8 @@ This is a step-by-step guide for students who are new to GitHub and pull request
 - Include comments and markdown cells to explain your work
 - Make sure all cells run without errors
 - Include a brief introduction in the first markdown cell:
-  - Your name
+ - Include a brief introduction in the first markdown cell:
+   - Group / author name (use `Author:` or `Group:`)
   - Project title
   - Project objective
   - Dataset information (if applicable)
@@ -136,7 +134,7 @@ This is a step-by-step guide for students who are new to GitHub and pull request
 
 **Q: I get merge conflicts**
 - Contact your instructor for assistance
-- Make sure you're only modifying files in your own folder
+ - Make sure you're only modifying your own notebook files (don't edit other students' submissions)
 
 ### Contact
 If you need help, please:
@@ -153,7 +151,7 @@ This repository includes a GitHub Actions workflow that automatically builds a s
 How it works:
 - A CI job runs on push to `main` (or `initial_setup`) — merging a student's PR into `main` will trigger a site rebuild automatically.
 - `scripts/build_site.py` converts each `.ipynb` into an HTML page and generates a central `index.html`.
-- Projects are grouped by course → student; each student's projects and filenames are shown on the main page. The builder reads the first markdown cell of each notebook as the dataset name and displays it on the project card.
+- Projects are grouped by course → student/group; each project's filename, dataset (first markdown line) and the Author/Group value (from the notebook) are shown on the main page. The builder reads the first markdown cell of each notebook to extract dataset and Author/Group information.
 - The site is deployed to the `gh-pages` branch using the Actions `peaceiris/actions-gh-pages` action.
 
 Preview the generated site at: https://<your-github-username>.github.io/Student_Projects_Hub (enable Pages in repo settings if not already enabled)

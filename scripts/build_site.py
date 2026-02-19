@@ -37,19 +37,9 @@ def find_notebooks() -> list[dict]:
         year = year_dir.name
         for course_dir in sorted(p for p in year_dir.iterdir() if p.is_dir()):
             course = course_dir.name
-            # student folders inside course
-            for student_dir in sorted(p for p in course_dir.iterdir() if p.is_dir()):
-                student = student_dir.name
-                # collect notebooks in student folder
-                for nb in sorted(student_dir.glob("*.ipynb")):
-                    projects.append(
-                        {
-                            "year": year,
-                            "course": course,
-                            "student": student,
-                            "notebook_path": nb,
-                        }
-                    )
+            # find notebooks anywhere under the course directory (no personal folders required)
+            for nb in sorted(x for x in course_dir.rglob("*.ipynb") if ".ipynb_checkpoints" not in x.parts):
+                projects.append({"year": year, "course": course, "notebook_path": nb})
     return projects
 
 
@@ -80,10 +70,30 @@ def extract_title_and_description(nb_node) -> tuple[str, str]:
     return dataset, desc
 
 
-def convert_notebook(nb_path: Path, out_path: Path) -> tuple[str, str]:
-    """Convert notebook to HTML and return (dataset, short_description)."""
+def extract_author(nb_node) -> str | None:
+    """Return the Author/Group value from the notebook (first markdown cell), or None."""
+    for cell in nb_node.cells:
+        if cell.cell_type != "markdown":
+            continue
+        text = cell.source or ""
+        for ln in (l.strip() for l in text.splitlines()):
+            m = re.match(r"^(?:Author|Group)\s*:\s*(.+)$", ln, flags=re.I)
+            if m:
+                return m.group(1).strip()
+        # only inspect the first markdown cell for author/group per convention
+        break
+    return None
+
+
+def convert_notebook(nb_path: Path, out_path: Path) -> tuple[str, str, str | None]:
+    """Convert notebook to HTML and return (dataset, short_description, author).
+
+    `author` is the value of an `Author:` or `Group:` line in the first markdown cell
+    (if present).
+    """
     nb_node = nbformat.read(nb_path, as_version=4)
     dataset, desc = extract_title_and_description(nb_node)
+    author = extract_author(nb_node)
 
     exporter = HTMLExporter()
     exporter.exclude_input = False
@@ -92,7 +102,7 @@ def convert_notebook(nb_path: Path, out_path: Path) -> tuple[str, str]:
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(body, encoding="utf-8")
-    return dataset, desc
+    return dataset, desc, author
 
 
 def convert_markdown(md_path: Path, out_path: Path) -> str:
@@ -182,24 +192,20 @@ def build() -> int:
     found = find_notebooks()
     built = []
 
-    # detect student folders that contain no notebooks (helpful for instructors)
-    empty_student_dirs = []
-    for year_dir in sorted(p for p in ROOT.iterdir() if p.is_dir() and p.name.isdigit()):
-        for course_dir in sorted(p for p in year_dir.iterdir() if p.is_dir()):
-            for student_dir in sorted(p for p in course_dir.iterdir() if p.is_dir()):
-                if not any(student_dir.glob("*.ipynb")):
-                    empty_student_dirs.append(student_dir)
-    if empty_student_dirs:
-        print("Warning: the following student folders contain no notebooks:")
-        for sd in empty_student_dirs:
-            print(" -", sd.relative_to(ROOT))
-
     for entry in found:
         nb_path: Path = entry["notebook_path"]
-        rel_out_dir = Path(entry["year"]) / entry["course"] / entry["student"]
+        # preserve any subfolder structure under the course directory; place
+        # output under site/<year>/<course>/[optional-subfolder]/<notebook>.html
+        course_root = ROOT / entry["year"] / entry["course"]
+        try:
+            rel = nb_path.relative_to(course_root)
+        except Exception:
+            # fallback to using the notebook parent name
+            rel = nb_path.name
+        rel_out_dir = Path(entry["year"]) / entry["course"] / Path(rel).parent
         out_html = OUT_DIR / rel_out_dir / (nb_path.stem + ".html")
 
-        dataset, desc = convert_notebook(nb_path, out_html)
+        dataset, desc, author = convert_notebook(nb_path, out_html)
 
         # also convert README.md if present in same folder
         readme = nb_path.parent / "README.md"
@@ -209,6 +215,8 @@ def build() -> int:
         entry["dataset"] = dataset
         entry["desc"] = desc
         entry["filename"] = nb_path.name
+        # extract student/group from notebook (fallback to filename stem)
+        entry["student"] = author or nb_path.stem
         # keep a display title (fallback to filename stem)
         entry["title"] = nb_path.stem
         # link from site root

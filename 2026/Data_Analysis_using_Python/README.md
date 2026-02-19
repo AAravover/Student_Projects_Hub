@@ -8,25 +8,23 @@ This folder contains student projects from the **Data Analysis using Python** co
 
 ## 📂 Folder Structure
 
-Each student should create their own folder with their name and submit their projects within it:
+Place your notebook file directly in this course folder (you may create an optional subfolder). The site automatically extracts the group/author name from the notebook's first markdown cell.
 
 ```
 Data_Analysis_using_Python/
 ├── README.md (this file)
-├── student_name_1/
-│   ├── project_1.ipynb
-│   └── project_2.ipynb
-├── student_name_2/
-│   └── project_1.ipynb
-└── ...
+├── group_alpha_project1.ipynb
+├── group_beta_analysis.ipynb
+└── optional_subfolder/
+   └── another_project.ipynb
 ```
 
 ## 📝 Project Submission Guidelines
 
-### Folder Naming
-- Create a folder with your name: `firstname_lastname/`
-- Example: `john_doe/` or `jane_smith/`
-- Use lowercase letters and underscores (no spaces)
+### Submission location & naming
+- Add your notebook to this course folder (or an optional subfolder).
+- Use descriptive filenames (e.g. `groupname_project.ipynb`) and avoid spaces.
+- Ensure the first markdown cell contains `Author:` or `Group:` with your group name (the site reads this value).
 
 ### File Naming
 - Use descriptive names for your notebooks
@@ -90,7 +88,7 @@ Students typically use:
 - [ ] All plots have appropriate titles, labels, and legends
 - [ ] Results are interpreted and explained
 - [ ] No sensitive or proprietary data included
-- [ ] File is in your personal folder
+ - [ ] File is placed in this course folder (not in other students' files)
 - [ ] No large files (> 10MB) included
 
 ## 🎯 Learning Objectives

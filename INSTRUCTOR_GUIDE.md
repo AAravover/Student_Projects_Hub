@@ -15,10 +15,9 @@ Student_Projects_Hub/
 ├── PROJECT_TEMPLATE.md               # Project structure template
 ├── .gitignore                        # Excludes checkpoints, data files
 └── [YEAR]/                           # e.g., 2026/
-    └── [COURSE_NAME]/                # e.g., Python_for_Data_Analytics_II/
-        ├── README.md                 # Course-specific guidelines
-        └── [student_name]/           # e.g., john_doe/
-            └── project.ipynb         # Student's Jupyter notebook
+   └── [COURSE_NAME]/                # e.g., Python_for_Data_Analytics_II/
+      ├── README.md                 # Course-specific guidelines
+      └── project_notebook.ipynb    # Student/group notebooks live directly under the course folder
 ```
 
 ## 👨‍🏫 Managing Student Submissions
@@ -29,8 +28,8 @@ When a student submits a pull request:
 
 1. **Check PR Details**
    - Verify the PR title and description are clear
-   - Ensure they're submitting to the correct course folder
-   - Confirm they're only adding files in their own folder
+   - Ensure the notebook is added to the correct course folder
+   - Confirm the notebook's first markdown cell includes an `Author:` or `Group:` line
 
 2. **Review the Notebook**
    - Open the `.ipynb` file in the PR
@@ -51,9 +50,9 @@ When a student submits a pull request:
    - If changes needed, request changes with clear instructions
    - Once revised, merge the PR
 
-### Common Issues to Check
-
-- ✅ Files are in correct folder: `[year]/[course]/[student_name]/`
+- ### Common Issues to Check
+-
+- ✅ Files are in the correct course folder and notebooks include a Group/Author in the first markdown cell
 - ✅ No large data files (> 10MB)
 - ✅ No modifications to other students' work
 - ✅ Notebook has proper structure and documentation
@@ -93,26 +92,16 @@ To add a new course:
 ### Viewing All Submissions
 
 ```bash
-# List all students in a course
-ls 2026/Python_for_Data_Analytics_II/
+# List all notebooks in a course
+find 2026/Python_for_Data_Analytics_II/ -maxdepth 2 -name "*.ipynb"
 
 # Count submissions per course
 find 2026/Python_for_Data_Analytics_II/ -name "*.ipynb" | wc -l
 ```
 
-### Creating a Student Roster
+### Creating a Submission Roster
 
-You can create a simple script to list all students:
-
-```bash
-#!/bin/bash
-echo "Students in Python for Data Analytics II (2026):"
-for dir in 2026/Python_for_Data_Analytics_II/*/; do
-    if [ -d "$dir" ]; then
-        basename "$dir"
-    fi
-done
-```
+You can list submitted notebooks (optionally extract the `Author:` line from each notebook with a small Python script) — the site already groups projects by the Author/Group value inside each notebook.
 
 ## 🌐 Building a Website (Future)
 

@@ -11,9 +11,11 @@ Below is a suggested structure for your Jupyter notebook:
 ### Cell 1: Title (Markdown)
 
 ```markdown
+# [Dataset name]
+
 # [Your Project Title]
 
-**Author**: [Your Full Name]  
+**Author**: [Group or Author Name]  
 **Date**: [Submission Date]  
 **Course**: [Course Name - e.g., Python for Data Analytics II]  
 **Academic Year**: 2026
@@ -251,7 +253,7 @@ plt.show()
 ## Tips for Success
 
 1. **Run All Cells**: Before submitting, use "Kernel → Restart & Run All" to ensure everything works
-Note: the repository's website generator expects the first markdown cell to contain the dataset name (first non-empty line) and an optional short description on the following line(s). The site will also display the notebook filename for each project, so choose descriptive filenames (use underscores, no spaces).
+Note: the repository's website generator expects the first markdown cell to contain the dataset name (first non-empty line) and an optional short description on the following line(s). Include an `Author:` or `Group:` line in the first markdown cell. The site will display the notebook filename and the Author/Group value on the project card.
 2. **Clear Output**: Consider clearing large outputs to keep file size manageable
 3. **Comments**: Add comments to explain complex code
 4. **Markdown**: Use markdown cells to create a narrative flow
