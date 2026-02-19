@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pages: write
 
     steps:
       - name: Checkout repository
@@ -37,3 +38,30 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./site
+
+      - name: Ensure Pages is configured to use gh-pages
+        env:
+          REPO: ${{ github.repository }}
+        run: |
+          echo "Configuring GitHub Pages to serve from gh-pages branch"
+          curl -sS -X PUT "https://api.github.com/repos/${REPO}/pages" \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -d '{"source":{"branch":"gh-pages","path":"/"}}' || true
+
+      - name: Wait for Pages site to be published and show URL
+        run: |
+          REPO="${{ github.repository }}"
+          for i in $(seq 1 12); do
+            resp=$(curl -sS -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${REPO}/pages" || true)
+            status=$(echo "$resp" | jq -r .status // empty)
+            url=$(echo "$resp" | jq -r .html_url // empty)
+            echo "Pages status: $status; html_url: $url"
+            if [ "$status" = "built" ] && [ "$url" != "null" ] && [ -n "$url" ]; then
+              echo "Pages available at: $url"
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "Pages did not become available in time; check repository Settings → Pages"
+          exit 1
