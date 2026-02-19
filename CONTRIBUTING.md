@@ -32,6 +32,7 @@ Before submitting your pull request, ensure:
 - [ ] All code cells run without errors
 - [ ] Your notebook includes:
   - [ ] Title and your name
+  - [ ] The first markdown cell contains the dataset name (required for the site)
   - [ ] Introduction/objective
   - [ ] Well-commented code
   - [ ] Visualizations with labels

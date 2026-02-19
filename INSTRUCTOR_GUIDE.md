@@ -133,6 +133,15 @@ Example structure:
 - **GitHub Pages**: Free hosting
 - **GitHub Actions**: Automatic deployment on PR merge
 
+### Current repository support
+This repository already includes an automated pipeline that builds a static showcase and deploys it to GitHub Pages. To enable it for your course:
+
+1. Merge student submissions into `main`.
+2. In the repository Settings → Pages, set the source to the `gh-pages` branch (the Actions workflow will create/update this branch).
+3. Optionally set a custom domain.
+
+The site regenerates automatically on every push to `main`.
+
 ## 🔒 Repository Settings
 
 ### Recommended Settings
@@ -145,6 +154,13 @@ Example structure:
 2. **Merge Settings**:
    - Allow squash merging (recommended)
    - Delete head branches automatically after merge
+
+### Recommended status checks
+To ensure the site updates reliably and student submissions follow the repository conventions, enable these status checks under Branch protection for `main`:
+- `Validate notebooks` (the workflow `validate-notebooks.yml`) — ensures the first markdown cell (dataset name) is present
+- `Build & deploy site` (the workflow `build-and-deploy.yml`) — ensures the site builds correctly before or after merge
+
+Requiring these checks prevents merges that would break the automatic site generation.
 
 3. **Issues**:
    - Enable issues for student questions

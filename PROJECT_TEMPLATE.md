@@ -251,6 +251,7 @@ plt.show()
 ## Tips for Success
 
 1. **Run All Cells**: Before submitting, use "Kernel → Restart & Run All" to ensure everything works
+Note: the repository's website generator expects the first markdown cell to contain the dataset name (first non-empty line) and an optional short description on the following line(s). The site will also display the notebook filename for each project, so choose descriptive filenames (use underscores, no spaces).
 2. **Clear Output**: Consider clearing large outputs to keep file size manageable
 3. **Comments**: Add comments to explain complex code
 4. **Markdown**: Use markdown cells to create a narrative flow

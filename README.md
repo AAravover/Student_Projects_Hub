@@ -144,8 +144,28 @@ If you need help, please:
 - Contact your course instructor
 
 ## 🏆 Showcase
-
 Once your pull request is approved, your project will be visible on this repository, showcasing your work to peers and potential employers!
+
+## 🌐 Auto-generated showcase website
+
+This repository includes a GitHub Actions workflow that automatically builds a static website from student Jupyter notebooks and deploys it to GitHub Pages.
+
+How it works:
+- A CI job runs on push to `main` (or `initial_setup`) — merging a student's PR into `main` will trigger a site rebuild automatically.
+- `scripts/build_site.py` converts each `.ipynb` into an HTML page and generates a central `index.html`.
+- Projects are grouped by course → student; each student's projects and filenames are shown on the main page. The builder reads the first markdown cell of each notebook as the dataset name and displays it on the project card.
+- The site is deployed to the `gh-pages` branch using the Actions `peaceiris/actions-gh-pages` action.
+
+Preview the generated site at: https://<your-github-username>.github.io/Student_Projects_Hub (enable Pages in repo settings if not already enabled)
+
+Developers: to preview locally run:
+
+```bash
+python -m pip install -r requirements.txt
+python scripts/build_site.py
+# open site/index.html in your browser
+```
+
 
 ---
 
